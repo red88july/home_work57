@@ -9,16 +9,19 @@ const UserForm: React.FC<Props> = ({onSubmit}) => {
   const [user, setUser] = useState<UserMutation>({
     name: '',
     email: '',
-    isActive: false,
+    isActiveYes: false,
+    isActiveNo: false,
     role: '',
   });
 
   const changeUser = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    setUser((prevState) => ({
-      ...prevState,
-      [e.target.name]: e.target.value,
-      role: e.target.value,
-    }));
+    setUser((prevState) => {
+      const {name, value} = e.target;
+      return {
+        ...prevState,
+        [name]: value,
+      };
+    });
   };
 
   const onFormSubmit = (e: React.FormEvent) => {
@@ -30,7 +33,11 @@ const UserForm: React.FC<Props> = ({onSubmit}) => {
 
     setUser((prevState) => ({
       ...prevState,
-      isActive: false,
+      name: '',
+      email: '',
+      isActiveYes: false,
+      isActiveNo: false,
+      role: '',
     }));
   };
 
@@ -54,18 +61,34 @@ const UserForm: React.FC<Props> = ({onSubmit}) => {
                className="form-control"
                id="email-input"/>
       </div>
-      <div className="mb-3 form-check">
-        <label className="form-check-label" htmlFor="isActive">Active</label>
-        <input type="checkbox"
-               name="isActive"
-               checked={user.isActive}
-               onChange={changeUser}
-               className="form-check-input"
-               id="isActive"/>
-
+      <div className="mt-2 mb-2">
+        <strong>Active</strong>
       </div>
-      <select className="form-select" onChange={changeUser} value={user.role}>
-        <option selected>Choose role</option>
+      <div className="d-flex col">
+        <div className="mb-3 form-check">
+          <label className="form-check-label" htmlFor="isActiveYes">Yes</label>
+          <input type="checkbox"
+                 name="isActiveYes"
+                 checked={user.isActiveYes}
+                 onChange={changeUser}
+                 value="Yes"
+                 className="form-check-input"
+                 id="isActiveYes"/>
+        </div>
+        <div className="mb-3 form-check ms-3">
+          <label htmlFor="isActiveNo">No</label>
+          <input type="checkbox"
+                 name="isActiveNo"
+                 value="No"
+                 checked={user.isActiveNo}
+                 onChange={changeUser}
+                 className="form-check-input"
+                 id="isActiveNo"/>
+        </div>
+      </div>
+
+      <select className="form-select" name='role' onChange={changeUser} value={user.role}>
+        <option value="">Choose role</option>
         <option value="User">User</option>
         <option value="Editor">Editor</option>
         <option value="Admin">Admin</option>
